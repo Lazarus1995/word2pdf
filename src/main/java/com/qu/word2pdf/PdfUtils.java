@@ -16,39 +16,38 @@ import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import java.io.*;
 
 public class PdfUtils {
 
-    private static final String basePath = "src/main/resources/template/";
-    private static final String fontPath = "src/main/resources/font/";
+    private static final String basePath = "zczhgl-web-server/zczhgl-web-common/src/main/resources/template/";
+    private static final String fontPath = "zczhgl-web-server/zczhgl-web-common/src/main/resources/font/";
 
     public static void word2pdf() throws IOException, XDocReportException {
         InputStream in = new FileInputStream(
-                basePath + "test.docx");
+                basePath + "test1.docx");
         IXDocReport report = XDocReportRegistry
                 .getRegistry()
                 .loadReport(in, TemplateEngineKind.Freemarker);
 
         FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
-        fieldsMetadata.load("Employee",Employee.class);
+       fieldsMetadata.load("car",car.class);
 //        fieldsMetadata.load("Project",Project.class,true);
 
-        Employee employee = new Employee("川A12345","qu","3","blue");
-        List<Project> projectList = new ArrayList<>();
-        projectList.add(new Project("qu","17358540214"));
-        projectList.add((new Project("zy","1566347")));
-
+//        Employee employee = new Employee("川A12345","qu","3","blue");
+//        List<Project> projectList = new ArrayList<>();
+ //       projectList.add(new Project("qu","17358540214"));
+//        projectList.add((new Project("zy","1566347")));
+        car car = new car();
+        car.setEvidenceNumber("111111");
+        car.setPlate("2222");
         IContext context = report.createContext();
         //Project project = new Project("ABC");
-        context.put("title", "车辆");
-        context.put("Employee",employee);
+//        context.put("title", "车辆");
+        context.put("car",car);
 //        context.put("Project",projectList);
 
-        OutputStream out=new FileOutputStream(new File(basePath+"test.pdf"));
+        OutputStream out=new FileOutputStream(new File(basePath+"test1.pdf"));
 
         Options options = Options.getTo(ConverterTypeTo.PDF).via(ConverterTypeVia.XWPF).subOptions(PdfOptions.create()
                 .fontEncoding("UTF-8").fontProvider(new IFontProvider() {
