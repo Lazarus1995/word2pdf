@@ -167,24 +167,15 @@
  */
 package com.qu.word2pdf;
 
-public class Project {
+public class Role {
 
 	private final String name;
-	private String url;
 
-	public Project(String name) {
+	public Role(String name) {
 		this.name = name;
 	}
-
+	
 	public String getName() {
 		return name;
-	}
-
-	public void setURL(String url) {
-		this.url = url;
-	}
-
-	public String getURL() {
-		return url;
 	}
 }

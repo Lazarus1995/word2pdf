@@ -167,24 +167,28 @@
  */
 package com.qu.word2pdf;
 
-public class Project {
+import fr.opensagres.xdocreport.document.images.IImageProvider;
+import fr.opensagres.xdocreport.template.annotations.FieldMetadata;
+import fr.opensagres.xdocreport.template.annotations.ImageMetadata;
 
-	private final String name;
-	private String url;
+public class DeveloperWithImage
+    extends Developer
+{
 
-	public Project(String name) {
-		this.name = name;
-	}
+    private final IImageProvider photo;
 
-	public String getName() {
-		return name;
-	}
+    public DeveloperWithImage( String name, String lastName, String mail, IImageProvider photo )
+    {
+        super( name, lastName, mail );
+        this.photo = photo;
+    }
 
-	public void setURL(String url) {
-		this.url = url;
-	}
+    // as docx cannot support bookmark name, with dot, we force the name of this field to "photo" and we use "photo" as
+    // bookmark name which wraps the "template image".
+    @FieldMetadata( images = { @ImageMetadata( name = "photo" ) } )
+    public IImageProvider getPhoto()
+    {
+        return photo;
+    }
 
-	public String getURL() {
-		return url;
-	}
 }

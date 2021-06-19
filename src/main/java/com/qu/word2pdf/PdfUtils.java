@@ -8,6 +8,8 @@ import fr.opensagres.xdocreport.converter.ConverterTypeVia;
 import fr.opensagres.xdocreport.converter.Options;
 import fr.opensagres.xdocreport.core.XDocReportException;
 import fr.opensagres.xdocreport.document.IXDocReport;
+import fr.opensagres.xdocreport.document.images.FileImageProvider;
+import fr.opensagres.xdocreport.document.images.IImageProvider;
 import fr.opensagres.xdocreport.document.registry.XDocReportRegistry;
 import fr.opensagres.xdocreport.itext.extension.font.IFontProvider;
 import fr.opensagres.xdocreport.itext.extension.font.ITextFontRegistry;
@@ -16,38 +18,37 @@ import fr.opensagres.xdocreport.template.TemplateEngineKind;
 import fr.opensagres.xdocreport.template.formatter.FieldsMetadata;
 
 import java.awt.*;
+import java.util.List;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PdfUtils {
 
-    private static final String basePath = "zczhgl-web-server/zczhgl-web-common/src/main/resources/template/";
-    private static final String fontPath = "zczhgl-web-server/zczhgl-web-common/src/main/resources/font/";
+    private static final String basePath = "src/main/resources/template/";
+    private static final String fontPath = "src/main/resources/font/";
 
     public static void word2pdf() throws IOException, XDocReportException {
-        InputStream in = new FileInputStream(
-                basePath + "test1.docx");
+        InputStream in = new FileInputStream(basePath + "test.docx");
         IXDocReport report = XDocReportRegistry
                 .getRegistry()
                 .loadReport(in, TemplateEngineKind.Freemarker);
 
+
         FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
-       fieldsMetadata.load("car",car.class);
-//        fieldsMetadata.load("Project",Project.class,true);
+        fieldsMetadata.addFieldAsImage("image");
+        fieldsMetadata.addFieldAsList("developers.Name");
+        fieldsMetadata.addFieldAsList("developers.Mail");
+        report.setFieldsMetadata(fieldsMetadata);
 
-//        Employee employee = new Employee("川A12345","qu","3","blue");
-//        List<Project> projectList = new ArrayList<>();
- //       projectList.add(new Project("qu","17358540214"));
-//        projectList.add((new Project("zy","1566347")));
-        car car = new car();
-        car.setEvidenceNumber("111111");
-        car.setPlate("2222");
         IContext context = report.createContext();
-        //Project project = new Project("ABC");
-//        context.put("title", "车辆");
-        context.put("car",car);
-//        context.put("Project",projectList);
+        context.put("name","qu");
 
-        OutputStream out=new FileOutputStream(new File(basePath+"test1.pdf"));
+        IImageProvider photo = new FileImageProvider(new File("C:\\Users\\admin\\Desktop\\test1.png"),true);
+        context.put("image",photo);
+
+
+        OutputStream out=new FileOutputStream(new File(basePath+"test.pdf"));
 
         Options options = Options.getTo(ConverterTypeTo.PDF).via(ConverterTypeVia.XWPF).subOptions(PdfOptions.create()
                 .fontEncoding("UTF-8").fontProvider(new IFontProvider() {
@@ -67,7 +68,6 @@ public class PdfUtils {
                     }
                 }));
         report.convert(context, options, out);
-//        report.process(context,out);
     }
 
     public static void main(String[] args) throws IOException, XDocReportException {
