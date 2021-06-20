@@ -29,26 +29,24 @@ public class PdfUtils {
     private static final String fontPath = "src/main/resources/font/";
 
     public static void word2pdf() throws IOException, XDocReportException {
-        InputStream in = new FileInputStream(basePath + "test.docx");
-        IXDocReport report = XDocReportRegistry
-                .getRegistry()
-                .loadReport(in, TemplateEngineKind.Freemarker);
+        InputStream in = new FileInputStream(basePath + "test1.docx");
+        IXDocReport report = XDocReportRegistry.getRegistry().loadReport(in, TemplateEngineKind.Freemarker);
 
 
         FieldsMetadata fieldsMetadata = report.createFieldsMetadata();
-        fieldsMetadata.addFieldAsImage("image");
-        fieldsMetadata.addFieldAsList("developers.Name");
-        fieldsMetadata.addFieldAsList("developers.Mail");
-        report.setFieldsMetadata(fieldsMetadata);
+        fieldsMetadata.load("car",Car.class);
+        fieldsMetadata.load("image",CarImage.class,true);
+
+        List<CarImage> carImageList = new ArrayList<>();
+        carImageList.add(new CarImage("名称1",new FileImageProvider(new File(basePath+"AngeloZERR.jpg"))));
+        carImageList.add(new CarImage("名称2",new FileImageProvider(new File(basePath+"PascalLeclercq.jpg"))));
 
         IContext context = report.createContext();
-        context.put("name","qu");
-
-        IImageProvider photo = new FileImageProvider(new File("C:\\Users\\admin\\Desktop\\test1.png"),true);
-        context.put("image",photo);
+        context.put("car",new Car());
+        context.put("image",carImageList);
 
 
-        OutputStream out=new FileOutputStream(new File(basePath+"test.pdf"));
+        OutputStream out=new FileOutputStream(new File(basePath+"test1.pdf"));
 
         Options options = Options.getTo(ConverterTypeTo.PDF).via(ConverterTypeVia.XWPF).subOptions(PdfOptions.create()
                 .fontEncoding("UTF-8").fontProvider(new IFontProvider() {

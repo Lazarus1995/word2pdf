@@ -43,11 +43,6 @@ public class Utils {
 
             // 2) Create fields metadata to manage lazy loop ([#list Freemarker) for table row.
             FieldsMetadata metadata = report.createFieldsMetadata();
-            // Old API
-            /*
-             * metadata.addFieldAsList("developers.name"); metadata.addFieldAsList("developers.lastName");
-             * metadata.addFieldAsList("developers.mail"); metadata.addFieldAsList("developers.photo");
-             */
             // NEW API
             metadata.load("developers", DeveloperWithImage.class, true);
 
