@@ -1,4 +1,4 @@
-package com.sinoiov.zczhgl.common.utils;
+package com.qu.word2pdf;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
@@ -12,8 +12,6 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.*;
-import com.sinoiov.zczhgl.common.enums.ContentTypeEnum;
-import com.sinoiov.zczhgl.common.exception.BizException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
