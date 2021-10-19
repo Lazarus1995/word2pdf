@@ -49,7 +49,7 @@ public class TemplateUtil {
             fillData(fis, fos, data);
         } catch (Exception e) {
             log.error("生成文书时出现异常：", e);
-            throw new BizException("生成文书时出现异常");
+            e.printStackTrace();
         }
     }
 
@@ -68,7 +68,7 @@ public class TemplateUtil {
             template.close();
         } catch (Exception e) {
             log.error("生成文书时出现异常：", e);
-            throw new BizException("生成文书时出现异常");
+            e.printStackTrace();
         }
     }
 
@@ -90,7 +90,7 @@ public class TemplateUtil {
             fillAndConvert2Pdf(fis, fos, data, converter);
         } catch (Exception e) {
             log.error("生成并转换文书时出现异常：", e);
-            throw new BizException("生成并转换文书时出现异常");
+            e.printStackTrace();
         }
     }
 
@@ -111,14 +111,14 @@ public class TemplateUtil {
                                           DocumentConverter converter) {
         try (ServletOutputStream sos = response.getOutputStream()) {
             response.setCharacterEncoding("utf-8");
-            response.setContentType(ContentTypeEnum.PDF.getContentType());
+            response.setContentType("application/pdf");
             response.addHeader("Content-Disposition", "attachment; filename="
                     + new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
             fillAndConvert2Pdf(is, sos, data, converter);
             sos.flush();
         } catch (Exception e) {
             log.error("生成/转换/下载文书时出现异常：", e);
-            throw new BizException("生成/转换/下载文书时出现异常");
+            e.printStackTrace();
         }
     }
 
@@ -148,7 +148,7 @@ public class TemplateUtil {
                     .as(DefaultDocumentFormatRegistry.PDF).execute();
         } catch (Exception e) {
             log.error("生成并转换文书时出现异常：", e);
-            throw new BizException("生成并转换文书时出现异常");
+            e.printStackTrace();
         }
     }
 
@@ -180,7 +180,7 @@ public class TemplateUtil {
             return removeBlankPage(newBos.toByteArray());
         } catch (Exception e) {
             log.error("生成并转换文件时出现异常：", e);
-            throw new BizException("生成并转换文件时出现异常");
+            throw new RuntimeException("生成并转换文件时出现异常");
         }
     }
 
@@ -209,7 +209,7 @@ public class TemplateUtil {
             PdfReader reader = new PdfReader(is);
             return reader.getNumberOfPages();
         } catch (IOException e) {
-            throw new BizException("读取pdf文档页数失败");
+            throw new RuntimeException("读取pdf文档页数失败");
         }
     }
 
@@ -224,7 +224,7 @@ public class TemplateUtil {
             PdfReader reader = new PdfReader(bytes);
             return reader.getNumberOfPages();
         } catch (IOException e) {
-            throw new BizException("读取pdf文档页数失败");
+            throw new RuntimeException("获取 PDF 失败");
         }
     }
 
@@ -264,7 +264,7 @@ public class TemplateUtil {
             reader.close();
             return baos.toByteArray();
         } catch (Exception e) {
-            throw new BizException("处理PDF空白页时出现异常");
+            throw new RuntimeException("移除 PDF 空白页失败");
         }
     }
 
@@ -305,7 +305,7 @@ public class TemplateUtil {
                     .keywords(keywords)
                     .keywordsMap(keywordsMap).build();
         } catch (IOException e) {
-            throw new BizException("读取pdf文档页数失败");
+            throw new RuntimeException("读取pdf文档页数失败");
         }
     }
 
